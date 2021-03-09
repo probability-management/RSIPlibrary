@@ -19,10 +19,10 @@
 #'
 #' testmeta <- sapply(testdf, FUN = summary)
 #'
-#' SIPLibrary2(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
+#' SIPlibrary2(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
 #'
 #' @export
-SIPLibrary2 <- function(DATAFRAME, filename, author, METADF = NULL) {
+SIPlibrary2 <- function(DATAFRAME, filename, author, METADF = NULL) {
   if (any(grepl("^([a-zA-Z]{1,3})[0-9]", colnames(DATAFRAME)) == TRUE)) {
     print("Column names match possible cell coordinates in Excel. Please use different column names.")
   } else {

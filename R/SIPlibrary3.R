@@ -28,7 +28,7 @@
 #'
 #' testmeta <- sapply(testdf, FUN = summary)
 #'
-#' SIPLibrary3(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
+#' SIPlibrary3(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
 #'
 #' @export
 SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "generate", bounds = c(0,1), boundedness = "u", term_saved = 5){

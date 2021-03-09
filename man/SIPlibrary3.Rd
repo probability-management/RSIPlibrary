@@ -54,6 +54,6 @@ SIP_5 = rnorm(5000))
 
 testmeta <- sapply(testdf, FUN = summary)
 
-SIPLibrary(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
+SIPlibrary3(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
 
 }
