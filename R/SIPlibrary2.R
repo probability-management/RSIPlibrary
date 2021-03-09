@@ -19,7 +19,7 @@
 #'
 #' testmeta <- sapply(testdf, FUN = summary)
 #'
-#' SIPLibrary(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
+#' SIPLibrary2(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
 #'
 #' @export
 SIPLibrary2 <- function(DATAFRAME, filename, author, METADF = NULL) {
