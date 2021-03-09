@@ -28,7 +28,7 @@
 #'
 #' testmeta <- sapply(testdf, FUN = summary)
 #'
-#' SIPLibrary(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
+#' SIPLibrary3(testdf, "finaltesting.xlsx", "Aaron Brown", testmeta)
 #'
 #' @export
 SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "generate", bounds = c(0,1), boundedness = "u", term_saved = 5){
@@ -117,8 +117,8 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
     openxlsx::createNamedRegion(wb, wks, "PM_Row_Headers_2", rows = 1:(40+countsips+metalen+term_saved), cols = 4)
 
     openxlsx::setColWidths(wb, wks, c(1,2), 17.5)
-    openxlsx::insertImage(wb, wks, "Logos.png", 2.5, 2.1, startRow = 11, startCol = 1)
-    openxlsx::saveWorkbook(wb,system.file("extdata", "Logos.png", package = "RSIPlibrary"),overwrite = TRUE)
+    openxlsx::insertImage(wb, wks, system.file("extdata", "Logos.png", package = "RSIPlibrary"), 2.5, 2.1, startRow = 11, startCol = 1)
+    openxlsx::saveWorkbook(wb,file = filename, overwrite = TRUE)
     print("Done! SIP Library saved successfully to your current working directory.")
   }
 }
