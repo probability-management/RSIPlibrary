@@ -20,7 +20,7 @@
 #'
 #' @export
 HDRSeeds <- function(n, entity = 1, var_id = "generate", option1 = 0, option2 = 0){
-  varid <- ifelse(var_id == "generate", stats::runif(1,1,100000000), var_id)
+  varid <- ifelse(var_id == "generate", round(stats::runif(1,1,100000000),0), var_id)
   df <- as.data.frame(matrix(nrow = 4, ncol = n))
     for (i in 1:n){
       df[i] <- c((entity),varid-1+i,option1,option2)
