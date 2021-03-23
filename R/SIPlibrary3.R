@@ -113,8 +113,10 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
     openxlsx::createNamedRegion(wb, wks, "PM_SIP_Names", rows = 4, cols = 2)
     openxlsx::createNamedRegion(wb, wks, "PM_Meta_Index", rows = 6:(5+metalen), cols = 2)
     openxlsx::createNamedRegion(wb, wks, "PM_Meta", rows = (16+countsips):(15+countsips+metalen), cols = 4)
+    openxlsx::createNamedRegion(wb, wks, "PM_HDR_Options", rows = (13+countsips):(14+countsips), cols = 4)
     openxlsx::createNamedRegion(wb, wks, "PM_Row_Headers_1", rows = 1:(40+countsips+metalen+term_saved), cols = 3)
     openxlsx::createNamedRegion(wb, wks, "PM_Row_Headers_2", rows = 1:(40+countsips+metalen+term_saved), cols = 4)
+
 
     openxlsx::setColWidths(wb, wks, c(1,2), 17.5)
     openxlsx::insertImage(wb, wks, system.file("extdata", "Logos.png", package = "RSIPlibrary"), 2.5, 2.1, startRow = 11, startCol = 1)
