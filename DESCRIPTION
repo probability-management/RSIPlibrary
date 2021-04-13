@@ -1,8 +1,8 @@
 Package: RSIPlibrary
 Type: Package
 Title: Creates Excel Readable SIPLibrary Files
-Version: 0.1.1
-Date: 3/8/2021
+Version: 0.1.2
+Date: 4/12/2021
 Author: Aaron Brown
 Maintainer: Aaron Brown <aaron@probabilitymanagement.org>
 Description: Combines a dataframe and an optional secondary metadata dataframe into a SIPLibrary readable in Excel for use with the SIPmath Tools and ChanceCalc. Has functions for both 2.0 and 3.0 SIP libraries.

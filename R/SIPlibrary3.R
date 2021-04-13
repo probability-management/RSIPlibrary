@@ -53,73 +53,52 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
       metalen <- length(as.data.frame(METADF)[[1]])
     }
 
-    openxlsx::writeData(wb, wks, c("PM_Trials", "PM_Lib_Provenance", "PM_SIP_Names", "PM_Meta", "PM_Meta_Index"), startRow = 2, startCol = 1)
-    openxlsx::writeData(wb, wks, c("F Inverse", author, paste0(colnames(DATAFRAME), collapse = ","), paste("D",(16+countsips),":D",(15+countsips+metalen), sep = ""), c(1:(0+metalen))), startRow = 2, startCol = 2)
-    openxlsx::writeData(wb, wks, c(1:(0+metalen)), startRow = 6, startCol = 2)
-    openxlsx::writeData(wb, wks, c("Formula", "Base Formula", "Name", "Type (SIP or F Inverse)", "Terms", "Bound"), startRow = 2, startCol = 3)
-    openxlsx::writeData(wb, wks, c("Lower", "Upper"), startRow = 8, startCol = 4)
+    openxlsx::writeData(wb, wks, c("PM_Property_Names", "PM_Trials", "PM_Lib_Provenance", "PM_SIP_Names", "PM_Meta", "PM_Meta_Index", "PM_NumCholesky", "PM_NumMeta", "PM_NumDensity", "PM_NumCoeffs", "PM_SIPmath"), startRow = 1, startCol = 1)
+    openxlsx::writeData(wb, wks, c("PM_Property_Values", "F Inverse", author, paste0(colnames(DATAFRAME), collapse = ","), "Unused in 3.0", "Unused in 3.0", countsips, metalen, 25, 16, "3.3b"), startRow = 1, startCol = 2)
+    openxlsx::writeData(wb, wks, c("PM_Row_Header_1", "Name", "Type (SIP or F Inverse)", "Terms", "Bound"), startRow = 1, startCol = 3)
 
-    openxlsx::writeData(wb, wks, "Cholesky", startRow = 10, startCol = 3)
-    openxlsx::writeData(wb, wks, "Copula", startRow = (10+countsips), startCol = 3)
-    openxlsx::writeData(wb, wks, "HDR", startRow = (11+countsips), startCol = 3)
-    openxlsx::writeData(wb, wks, c("Entity", "Var ID","Option1", "Option2"), startRow = (11+countsips), startCol = 4)
+    openxlsx::writeData(wb, wks, "Cholesky", startRow = 9, startCol = 3)
+    openxlsx::writeData(wb, wks, "HDR", startRow = (9+countsips), startCol = 3)
+    openxlsx::writeData(wb, wks, "MetaData", startRow = (13+countsips), startCol = 3)
 
-    openxlsx::writeData(wb, wks, "HDR_Formula", startRow = (15+countsips), startCol = 3)
-    openxlsx::writeData(wb, wks, "MetaData", startRow = (16+countsips), startCol = 3)
-    openxlsx::writeData(wb, wks, chol(stats::cor(DATAFRAME)), startRow = 10, startCol = 4, rowNames = TRUE, colNames = FALSE)
+    openxlsx::writeData(wb, wks, "Density", startRow = (13+countsips+metalen), startCol = 3)
+    openxlsx::writeData(wb, wks, paste("Density", c(1:25), sep = ""), startRow = (13+countsips+metalen), startCol = 4)
+
+    openxlsx::writeData(wb, wks, "A_Coef", startRow = (38+countsips+metalen), startCol = 3)
+    openxlsx::writeData(wb, wks, paste("A_", c(1:term_saved), sep = ""), startRow = (38+countsips+metalen), startCol = 4)
+
+    openxlsx::writeData(wb, wks, "PM_Row_Header_2", startRow = 1, startCol = 4)
+    openxlsx::writeData(wb, wks, c("Lower", "Upper"), startRow = 7, startCol = 4)
+    openxlsx::writeData(wb, wks, c("Entity", "Var ID","Option1", "Option2"), startRow = (9+countsips), startCol = 4)
+
+    openxlsx::writeData(wb, wks, chol(stats::cor(DATAFRAME)), startRow = 9, startCol = 4, rowNames = TRUE, colNames = FALSE)
     if (!is.null(METADF)) {
-      openxlsx::writeData(wb, wks, METADF, startRow = (16+countsips), startCol = 4, rowNames = TRUE, colNames = FALSE)
+      openxlsx::writeData(wb, wks, METADF, startRow = (13+countsips), startCol = 4, rowNames = TRUE, colNames = FALSE)
     }
-
-    openxlsx::writeData(wb, wks, "Density", startRow = (16+countsips+metalen), startCol = 3)
-    openxlsx::writeData(wb, wks, paste("Density", c(1:25), sep = ""), startRow = (16+countsips+metalen), startCol = 4)
-
-    openxlsx::writeData(wb, wks, "A_Coef", startRow = (41+countsips+metalen), startCol = 3)
-    openxlsx::writeData(wb, wks, paste("A_", c(1:term_saved), sep = ""), startRow = (41+countsips+metalen), startCol = 4)
 
     densityindexes <- c(1,10:108,117)
 
-    openxlsx::writeData(wb, wks, Seeds, startRow = (11+countsips), startCol = 5, colNames = FALSE)
-
-    yellow <- openxlsx::createStyle(fgFill = "#FFFF00")
+    openxlsx::writeData(wb, wks, Seeds, startRow = (9+countsips), startCol = 5, colNames = FALSE)
 
     start_time <- Sys.time()
     print(paste("Metalog operation began at",Sys.time()))
     for (i in 1:countsips){
       name <- colnames(DATAFRAME)[i]
       metafit <- rmetalog::metalog(DATAFRAME[,i], bounds = bounds, boundedness = boundedness, term_lower_bound = term_saved, term_limit = term_saved)
-      openxlsx::writeData(wb, wks, c(name, "", "", name, "F Inverse"), startRow = 1, startCol = 4+i)
-      openxlsx::writeData(wb, wks, term_saved, startRow = 6, startCol = 4+i)
-      openxlsx::writeData(wb, wks, boundedness, startRow = 7, startCol = 4+i)
-      openxlsx::writeData(wb, wks, c(bounds[1], bounds[2]), startRow = 8, startCol = 4+i)
-      openxlsx::writeData(wb, wks, stats::approx(metafit[["M"]][densityindexes,2],metafit[["M"]][densityindexes,1], n = 25)[2], startRow = (16+countsips+metalen), startCol = 4+i)
-      openxlsx::writeData(wb, wks, metafit[[4]][,2], startRow = (41+countsips+metalen), startCol = 4+i)
-      openxlsx::createNamedRegion(wb, wks, name, rows = 2:(40+countsips+metalen), cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".Header", sep = ""), rows = 4:9, cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".Cholesky", sep = ""), rows = 10:(9+countsips), cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".HDR", sep = ""), rows = (11+countsips):(14+countsips), cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".MetaData", sep = ""), rows = (16+countsips):(15+countsips+metalen), cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".Density", sep = ""), rows = (16+countsips+metalen):(40+countsips+metalen), cols = 4+i)
-      openxlsx::createNamedRegion(wb, wks, paste(name,".A_Coef", sep = ""), rows = (41+countsips+metalen):(40+countsips+metalen+term_saved), cols = 4+i)
-      openxlsx::addStyle(wb, wks, yellow, rows = c(2,3,(10+countsips),(15+countsips)), cols = 4+i, stack = TRUE)
+      openxlsx::writeData(wb, wks, c(paste("Var", i, sep = "_"), name, "F Inverse"), startRow = 1, startCol = 4+i)
+      openxlsx::writeData(wb, wks, term_saved, startRow = 4, startCol = 4+i)
+      openxlsx::writeData(wb, wks, c(boundedness, "F Inverse"), startRow = 5, startCol = 4+i)
+      openxlsx::writeData(wb, wks, c(bounds[1], bounds[2]), startRow = 7, startCol = 4+i)
+      openxlsx::writeData(wb, wks, stats::approx(metafit[["M"]][densityindexes,2],metafit[["M"]][densityindexes,1], n = 25)[2], startRow = (13+countsips+metalen), startCol = 4+i)
+      openxlsx::writeData(wb, wks, metafit[[4]][,2], startRow = (38+countsips+metalen), startCol = 4+i)
     }
 
     end_time <- Sys.time()
     print(paste("Metalog operation ended at",Sys.time()))
     print(end_time - start_time)
 
-    openxlsx::createNamedRegion(wb, wks, "PM_Trials", rows = 2, cols = 2)
-    openxlsx::createNamedRegion(wb, wks, "PM_Lib_Provenance", rows = 3, cols = 2)
-    openxlsx::createNamedRegion(wb, wks, "PM_SIP_Names", rows = 4, cols = 2)
-    openxlsx::createNamedRegion(wb, wks, "PM_Meta_Index", rows = 6:(5+metalen), cols = 2)
-    openxlsx::createNamedRegion(wb, wks, "PM_Meta", rows = (16+countsips):(15+countsips+metalen), cols = 4)
-    openxlsx::createNamedRegion(wb, wks, "PM_HDR_Options", rows = (13+countsips):(14+countsips), cols = 4)
-    openxlsx::createNamedRegion(wb, wks, "PM_Row_Headers_1", rows = 1:(40+countsips+metalen+term_saved), cols = 3)
-    openxlsx::createNamedRegion(wb, wks, "PM_Row_Headers_2", rows = 1:(40+countsips+metalen+term_saved), cols = 4)
-
-
-    openxlsx::setColWidths(wb, wks, c(1,2), 17.5)
-    openxlsx::insertImage(wb, wks, system.file("extdata", "Logos.png", package = "RSIPlibrary"), 2.5, 2.1, startRow = 11, startCol = 1)
+    openxlsx::setColWidths(wb, wks, c(1:4), 17.5)
+    openxlsx::insertImage(wb, wks, system.file("extdata", "Logos.png", package = "RSIPlibrary"), 2.5, 2.1, startRow = 12, startCol = 1)
     openxlsx::saveWorkbook(wb,file = filename, overwrite = TRUE)
     print("Done! SIP Library saved successfully to your current working directory.")
   }
