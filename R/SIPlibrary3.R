@@ -54,31 +54,33 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
     }
 
     openxlsx::writeData(wb, wks, c("PM_Property_Names", "PM_Trials", "PM_Lib_Provenance", "PM_SIP_Names", "PM_Meta", "PM_Meta_Index", "PM_NumCholesky", "PM_NumMeta", "PM_NumDensity", "PM_NumCoeffs", "PM_SIPmath"), startRow = 1, startCol = 1)
-    openxlsx::writeData(wb, wks, c("PM_Property_Values", "F Inverse", author, paste0(colnames(DATAFRAME), collapse = ","), "Unused in 3.0", "Unused in 3.0", countsips, metalen, 25, 16, "3.3b"), startRow = 1, startCol = 2)
+    openxlsx::writeData(wb, wks, c("PM_Property_Values", "F Inverse", author, paste0(colnames(DATAFRAME), collapse = ","), "Unused in 3.0", "Unused in 3.0"), startRow = 1, startCol = 2)
+    openxlsx::writeData(wb, wks, c(countsips, metalen, 25, 16), startRow = 7, startCol = 2)
+    openxlsx::writeData(wb, wks, c("3.2b"), startRow = 11, startCol = 2)
     openxlsx::writeData(wb, wks, c("PM_Row_Header_1", "Name", "Type (SIP or F Inverse)", "Terms", "Bound"), startRow = 1, startCol = 3)
 
-    openxlsx::writeData(wb, wks, "Cholesky", startRow = 9, startCol = 3)
-    openxlsx::writeData(wb, wks, "HDR", startRow = (9+countsips), startCol = 3)
-    openxlsx::writeData(wb, wks, "MetaData", startRow = (13+countsips), startCol = 3)
+    openxlsx::writeData(wb, wks, "Cholesky", startRow = 8, startCol = 3)
+    openxlsx::writeData(wb, wks, "HDR", startRow = (8+countsips), startCol = 3)
+    openxlsx::writeData(wb, wks, "MetaData", startRow = (12+countsips), startCol = 3)
 
-    openxlsx::writeData(wb, wks, "Density", startRow = (13+countsips+metalen), startCol = 3)
-    openxlsx::writeData(wb, wks, paste("Density", c(1:25), sep = ""), startRow = (13+countsips+metalen), startCol = 4)
+    openxlsx::writeData(wb, wks, "Density", startRow = (12+countsips+metalen), startCol = 3)
+    openxlsx::writeData(wb, wks, paste("Density", c(1:25), sep = ""), startRow = (12+countsips+metalen), startCol = 4)
 
-    openxlsx::writeData(wb, wks, "A_Coef", startRow = (38+countsips+metalen), startCol = 3)
-    openxlsx::writeData(wb, wks, paste("A_", c(1:term_saved), sep = ""), startRow = (38+countsips+metalen), startCol = 4)
+    openxlsx::writeData(wb, wks, "A_Coef", startRow = (37+countsips+metalen), startCol = 3)
+    openxlsx::writeData(wb, wks, paste("A_", c(1:term_saved), sep = ""), startRow = (37+countsips+metalen), startCol = 4)
 
     openxlsx::writeData(wb, wks, "PM_Row_Header_2", startRow = 1, startCol = 4)
-    openxlsx::writeData(wb, wks, c("Lower", "Upper"), startRow = 7, startCol = 4)
-    openxlsx::writeData(wb, wks, c("Entity", "Var ID","Option1", "Option2"), startRow = (9+countsips), startCol = 4)
+    openxlsx::writeData(wb, wks, c("Lower", "Upper"), startRow = 6, startCol = 4)
+    openxlsx::writeData(wb, wks, c("Entity", "Var ID","Option1", "Option2"), startRow = (8+countsips), startCol = 4)
 
-    openxlsx::writeData(wb, wks, chol(stats::cor(DATAFRAME)), startRow = 9, startCol = 4, rowNames = TRUE, colNames = FALSE)
+    openxlsx::writeData(wb, wks, chol(stats::cor(DATAFRAME)), startRow = 8, startCol = 4, rowNames = TRUE, colNames = FALSE)
     if (!is.null(METADF)) {
-      openxlsx::writeData(wb, wks, METADF, startRow = (13+countsips), startCol = 4, rowNames = TRUE, colNames = FALSE)
+      openxlsx::writeData(wb, wks, METADF, startRow = (12+countsips), startCol = 4, rowNames = TRUE, colNames = FALSE)
     }
 
     densityindexes <- c(1,10:108,117)
 
-    openxlsx::writeData(wb, wks, Seeds, startRow = (9+countsips), startCol = 5, colNames = FALSE)
+    openxlsx::writeData(wb, wks, Seeds, startRow = (8+countsips), startCol = 5, colNames = FALSE)
 
     start_time <- Sys.time()
     print(paste("Metalog operation began at",Sys.time()))
@@ -87,10 +89,10 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
       metafit <- rmetalog::metalog(DATAFRAME[,i], bounds = bounds, boundedness = boundedness, term_lower_bound = term_saved, term_limit = term_saved)
       openxlsx::writeData(wb, wks, c(paste("Var", i, sep = "_"), name, "F Inverse"), startRow = 1, startCol = 4+i)
       openxlsx::writeData(wb, wks, term_saved, startRow = 4, startCol = 4+i)
-      openxlsx::writeData(wb, wks, c(boundedness, "F Inverse"), startRow = 5, startCol = 4+i)
-      openxlsx::writeData(wb, wks, c(bounds[1], bounds[2]), startRow = 7, startCol = 4+i)
-      openxlsx::writeData(wb, wks, stats::approx(metafit[["M"]][densityindexes,2],metafit[["M"]][densityindexes,1], n = 25)[2], startRow = (13+countsips+metalen), startCol = 4+i)
-      openxlsx::writeData(wb, wks, metafit[[4]][,2], startRow = (38+countsips+metalen), startCol = 4+i)
+      openxlsx::writeData(wb, wks, c(boundedness), startRow = 5, startCol = 4+i)
+      openxlsx::writeData(wb, wks, c(bounds[1], bounds[2]), startRow = 6, startCol = 4+i)
+      openxlsx::writeData(wb, wks, stats::approx(metafit[["M"]][densityindexes,2],metafit[["M"]][densityindexes,1], n = 25)[2], startRow = (12+countsips+metalen), startCol = 4+i)
+      openxlsx::writeData(wb, wks, metafit[[4]][,2], startRow = (37+countsips+metalen), startCol = 4+i)
     }
 
     end_time <- Sys.time()
