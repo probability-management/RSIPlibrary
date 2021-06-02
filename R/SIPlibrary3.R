@@ -38,7 +38,7 @@ SIPlibrary3 <- function(DATAFRAME, filename, author, METADF = NULL, seeds = "gen
     Seeds <- if(is.data.frame(seeds)){
       seeds
     } else {
-      HDRSeeds(ncol(DATAFRAME))
+      RSIPlibrary::HDRSeeds(ncol(DATAFRAME))
     }
 
     wb <- openxlsx::createWorkbook()

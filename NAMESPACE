@@ -3,3 +3,4 @@
 export(HDRSeeds)
 export(SIPlibrary2)
 export(SIPlibrary3)
+export(SIPlibrary3json)

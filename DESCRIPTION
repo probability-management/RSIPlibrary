@@ -1,7 +1,7 @@
 Package: RSIPlibrary
 Type: Package
-Title: Creates Excel Readable SIPLibrary Files
-Version: 0.1.2
+Title: Creates Excel and Json SIPLibrary Files
+Version: 0.1.4
 Date: 4/12/2021
 Author: Aaron Brown
 Maintainer: Aaron Brown <aaron@probabilitymanagement.org>
